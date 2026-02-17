@@ -1,10 +1,11 @@
 {
   "name": "Territories",
   "short_name": "Territories",
-  "description": "A Sovereign Agent Governance PWA",
-  "start_url": "./index.html",
+  "description": "Deterministic Strategy Game",
+  "start_url": "/territories/index.html",
+  "scope": "/territories/",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#f3f4f6",
   "theme_color": "#000000",
   "icons": [
     {
