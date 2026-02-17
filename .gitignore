@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.jtasks/*/
+sagt/.jtasks/*/
+!sagt/.jtasks/_template/
+!sagt/.jtasks/2025-02-17T12:00:00.000/
