@@ -37,6 +37,18 @@ This repository follows the **Agent Skills** specification for modular procedura
 - JULES.md
 - TASK_GROUPS.md
 
+### nsad/SKILL.md
+**Use when:**
+- designing system boundaries (CPU, Network, API, UI)
+- optimizing data structures or message formats for next-stage alignment
+- identifying and fixing boundary impedance violations
+
+**Task group:** development
+
+**Reads first:**
+- ARCHITECTURE_RULES.md
+- SYSTEM_AXIOMS.md
+
 ### wdbasic-frontend/SKILL.md
 **Use when:**
 - building or modifying frontend components
