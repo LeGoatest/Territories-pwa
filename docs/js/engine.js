@@ -1,133 +1,133 @@
+
 /**
- * Territories Game Engine - Deterministic Reducer
- * Full Parity with lehaSVV2009/territories
+ * Territories Game Engine - Core Logic
  */
 
-export const CELL_TYPE = {
-  EMPTY: "EMPTY",
-  PLAYER_0: "PLAYER_0",
-  PLAYER_1: "PLAYER_1"
-};
+export function isValidMove(state, r, c, dr, dc, player) {
+    if (r < 0 || c < 0 || r + dr > state.rows || c + dc > state.cols) return false;
 
-export const ROWS = 15;
-export const COLS = 40;
+    // Must be empty
+    for (let i = r; i < r + dr; i++) {
+        for (let j = c; j < c + dc; j++) {
+            if (state.board[i][j] !== 0) return false;
+        }
+    }
 
-export const INITIAL_STATE = {
-  board: Array(ROWS).fill(null).map(() => Array(COLS).fill(CELL_TYPE.EMPTY)),
-  players: [
-    { id: "0", name: "Player 1", color: "#375E97" },
-    { id: "1", name: "Player 2", color: "#FB6542" }
-  ],
-  currentPlayerIndex: 0,
-  dices: [0, 0],
-  status: 'active',
-  log: ["Roll the dices to start!"]
-};
+    // Must be adjacent to existing territory (except first move)
+    const isFirstMove = !state.board.some(row => row.some(cell => cell === player));
+    if (isFirstMove) {
+        // First move must be near player starting corner
+        // Player 1: top-left (0,0), Player 2: bottom-right (rows-1, cols-1)
+        if (player === 1) {
+            return r === 0 && c === 0;
+        } else {
+            return r + dr === state.rows && c + dc === state.cols;
+        }
+    }
 
-export function reducer(state, action) {
-  if (!state) return INITIAL_STATE;
-
-  switch (action.type) {
-    case 'INIT':
-      return { ...INITIAL_STATE, board: Array(ROWS).fill(null).map(() => Array(COLS).fill(CELL_TYPE.EMPTY)) };
-
-    case 'ROLL_DICES':
-      if (state.dices[0] !== 0) return state;
-      const d1 = Math.floor(Math.random() * 6) + 1;
-      const d2 = Math.floor(Math.random() * 6) + 1;
-      return { ...state, dices: [d1, d2], log: [...state.log.slice(-10), `Rolled ${d1}x${d2}`] };
-
-    case 'SWITCH_DICES':
-      return { ...state, dices: [state.dices[1], state.dices[0]] };
-
-    case 'PLACE_RECTANGLE':
-      const [h, w] = state.dices;
-      if (h === 0 || w === 0) return state;
-
-      if (canDropRectangle(state, action.row, action.col, h, w)) {
-        const newBoard = state.board.map((row, rIdx) =>
-          row.map((cell, cIdx) => {
-            if (rIdx >= action.row && rIdx < action.row + h && cIdx >= action.col && cIdx < action.col + w) {
-              return state.currentPlayerIndex === 0 ? CELL_TYPE.PLAYER_0 : CELL_TYPE.PLAYER_1;
+    // Check adjacency
+    for (let i = r; i < r + dr; i++) {
+        for (let j = c; j < c + dc; j++) {
+            const neighbors = [
+                [i - 1, j], [i + 1, j], [i, j - 1], [i, j + 1]
+            ];
+            for (const [ni, nj] of neighbors) {
+                if (ni >= 0 && ni < state.rows && nj >= 0 && nj < state.cols) {
+                    if (state.board[ni][nj] === player) return true;
+                }
             }
-            return cell;
-          })
-        );
+        }
+    }
 
-        return {
-          ...state,
-          board: newBoard,
-          dices: [0, 0],
-          currentPlayerIndex: (state.currentPlayerIndex + 1) % state.players.length,
-          log: [...state.log.slice(-10), `${state.players[state.currentPlayerIndex].name} placed ${h}x${w}`]
-        };
-      }
-      return state;
-
-    case 'SKIP_TURN':
-      return {
-        ...state,
-        dices: [0, 0],
-        currentPlayerIndex: (state.currentPlayerIndex + 1) % state.players.length,
-        log: [...state.log.slice(-10), `${state.players[state.currentPlayerIndex].name} skipped.`]
-      };
-
-    case 'RESET':
-      return reducer(null, { type: 'INIT' });
-
-    default:
-      return state;
-  }
+    return false;
 }
 
-export function canDropRectangle(state, row, col, h, w) {
-  // 1. Bounds check
-  if (row < 0 || row + h > ROWS || col < 0 || col + w > COLS) return false;
-
-  // 2. Overlap check
-  for (let r = row; r < row + h; r++) {
-    for (let c = col; c < col + w; c++) {
-      if (state.board[r][c] !== CELL_TYPE.EMPTY) return false;
+export function applyMove(board, r, c, dr, dc, player) {
+    const newBoard = board.map(row => [...row]);
+    for (let i = r; i < r + dr; i++) {
+        for (let j = c; j < c + dc; j++) {
+            newBoard[i][j] = player;
+        }
     }
-  }
+    return newBoard;
+}
 
-  const isPlayer0 = state.currentPlayerIndex === 0;
+export function calculateScore(board, player) {
+    return board.flat().filter(cell => cell === player).length;
+}
 
-  // 3. Starting position check
-  if (isPlayer0) {
-    if (row === 0 && col === 0) return true;
-  } else {
-    if (row + h === ROWS && col + w === COLS) return true;
-  }
+export function checkClosedLoops(board, player) {
+    const rows = board.length;
+    const cols = board[0].length;
+    const newBoard = board.map(row => [...row]);
+    const visited = new Set();
 
-  // 4. Adjacency check
-  const targetCell = isPlayer0 ? CELL_TYPE.PLAYER_0 : CELL_TYPE.PLAYER_1;
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            if (newBoard[r][c] === 0 && !visited.has(`${r},${c}`)) {
+                const region = [];
+                const q = [[r, c]];
+                visited.add(`${r},${c}`);
+                let touchesEdge = false;
+                let touchesOther = false;
 
-  // Check neighbors of the entire rectangle
-  // Top neighbor
-  if (row > 0) {
-    for (let c = col; c < col + w; c++) {
-      if (state.board[row - 1][c] === targetCell) return true;
+                let head = 0;
+                while(head < q.length){
+                    const [currR, currC] = q[head++];
+                    region.push([currR, currC]);
+
+                    const neighbors = [[currR-1, currC], [currR+1, currC], [currR, currC-1], [currR, currC+1]];
+                    for(const [nr, nc] of neighbors){
+                        if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) {
+                            touchesEdge = true;
+                        } else if (board[nr][nc] === 0) {
+                            if (!visited.has(`${nr},${nc}`)) {
+                                visited.add(`${nr},${nc}`);
+                                q.push([nr, nc]);
+                            }
+                        } else if (board[nr][nc] !== player && board[nr][nc] !== 0) {
+                            touchesOther = true;
+                        }
+                    }
+                }
+
+                // If the region of empty cells is NOT touching the edge AND NOT touching another player
+                // Then it MUST be entirely surrounded by 'player' cells.
+                if (!touchesOther && !touchesEdge) {
+                    for (const [rr, cc] of region) {
+                        newBoard[rr][cc] = player;
+                    }
+                }
+            }
+        }
     }
-  }
-  // Bottom neighbor
-  if (row + h < ROWS) {
-    for (let c = col; c < col + w; c++) {
-      if (state.board[row + h][c] === targetCell) return true;
-    }
-  }
-  // Left neighbor
-  if (col > 0) {
-    for (let r = row; r < row + h; r++) {
-      if (state.board[r][col - 1] === targetCell) return true;
-    }
-  }
-  // Right neighbor
-  if (col + w < COLS) {
-    for (let r = row; r < row + h; r++) {
-      if (state.board[r][col + w] === targetCell) return true;
-    }
-  }
+    return newBoard;
+}
 
-  return false;
+export function getBestMove(state, player) {
+    let bestMove = null;
+    let maxScore = -1;
+
+    for (let r = 0; r < state.rows; r++) {
+        for (let c = 0; c < state.cols; c++) {
+            // Try both orientations
+            const orientations = [
+                [state.dice[0], state.dice[1]],
+                [state.dice[1], state.dice[0]]
+            ];
+
+            for (const [dr, dc] of orientations) {
+                if (isValidMove(state, r, c, dr, dc, player)) {
+                    // Greedy: just take it.
+                    // Future: check how many cells it helps surround.
+                    const score = dr * dc;
+                    if (score > maxScore) {
+                        maxScore = score;
+                        bestMove = { r, c, dr, dc };
+                    }
+                }
+            }
+        }
+    }
+    return bestMove;
 }

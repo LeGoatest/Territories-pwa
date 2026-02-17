@@ -46,3 +46,9 @@ All files from the source template were mirrored into the `./sagt/` directory:
 - **Action**: Added GitHub Action workflow for automated deployment.
 - **Workflow**: .github/workflows/deploy.yml
 - **Details**: Builds Tailwind v4 via Makefile and deploys to GitHub Pages using standard Actions.
+
+## [2025-02-17] High-Fidelity Refactoring & Structural Cleanup
+- **Action**: Deleted `src/` and moved all source code to `docs/` for direct GitHub Pages serving (Option A).
+- **Parity**: Implemented "Closed Loop" auto-occupation logic in `docs/js/engine.js` for mechanical parity with lehaSVV2009/territories.
+- **UI**: Enhanced tactical UI with coordinate display and better grid rendering in `docs/js/ui.js`.
+- **Build**: Simplified Makefile to build Tailwind directly from `docs/input.css` to `docs/css/output.css`.

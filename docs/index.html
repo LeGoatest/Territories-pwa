@@ -13,11 +13,21 @@
             display: grid;
             grid-template-columns: repeat(40, 1fr);
             grid-template-rows: repeat(15, 1fr);
-            background-color: #e2e8f0;
+            background-color: #cbd5e1;
             gap: 1px;
-            border: 1px solid #cbd5e1;
+            border: 2px solid #94a3b8;
             aspect-ratio: 40 / 15;
             width: 100%;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+        }
+        .cell {
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+            transition: all 0.1s ease;
+        }
+        .cell:hover {
+            filter: brightness(1.1);
         }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
@@ -30,7 +40,7 @@
                 <div class="bg-slate-900 p-2 rounded-xl">
                     <span class="iconify text-white" data-icon="mdi:map-check" data-width="20"></span>
                 </div>
-                <h1 class="text-xl font-black uppercase tracking-tighter text-slate-900">Territories</h1>
+                <h1 class="text-xl font-black uppercase tracking-tighter text-slate-900">Territories Command</h1>
             </div>
             <div class="flex items-center gap-10 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
                 <div class="flex items-center gap-3">
@@ -72,8 +82,8 @@
             </div>
             <div class="flex justify-between items-center px-4 text-[9px] font-bold uppercase tracking-widest text-slate-300">
                 <span>Sector A-01 [Alpha]</span>
-                <span>Coordinates: 15.000N / 40.000E</span>
-                <span>Operational Grid v4.0</span>
+                <span id="coord-display">Coordinates: -- / --</span>
+                <span>Operational Grid v4.1</span>
             </div>
         </div>
 
@@ -92,14 +102,5 @@
     </footer>
 
     <script type="module" src="js/ui.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js', { scope: './' })
-                    .then(reg => console.log('SW registered'))
-                    .catch(err => console.error('SW failed', err));
-            });
-        }
-    </script>
 </body>
 </html>
