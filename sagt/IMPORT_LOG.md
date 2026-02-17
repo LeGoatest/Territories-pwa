@@ -52,3 +52,8 @@ All files from the source template were mirrored into the `./sagt/` directory:
 - **Parity**: Implemented "Closed Loop" auto-occupation logic in `docs/js/engine.js` for mechanical parity with lehaSVV2009/territories.
 - **UI**: Enhanced tactical UI with coordinate display and better grid rendering in `docs/js/ui.js`.
 - **Build**: Simplified Makefile to build Tailwind directly from `docs/input.css` to `docs/css/output.css`.
+
+## [2025-02-17] Mechanical Fidelity Correction
+- **Action**: Verified original game logic from lehaSVV2009/territories-core.
+- **Correction**: Re-implemented 'Closed Loop' logic to use flood-fill based on surroundings, ensuring it matches the boardgame.io implementation.
+- **UI**: Aligned UI colors (#375E97, #FB6542) and table-based layout with the original game's visual identity.
