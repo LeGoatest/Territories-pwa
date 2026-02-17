@@ -35,3 +35,9 @@ All files from the source template were mirrored into the `./sagt/` directory:
 ## Verification
 - Checked internal relative links in `sagt/docs/ARCHITECTURE_INDEX.md` and `sagt/README.md`.
 - Navigation within `./sagt/` and from the root index is functional.
+
+## [2025-02-17] PWA Implementation & NSAD Skill
+- **Action**: Implemented high-fidelity Territories PWA.
+- **Action**: Imported NSAD skill from source template.
+- **Fidelity**: Grid 15x40, corner starts, adjacency rules implemented in `src/js/engine.js`.
+- **Infrastructure**: Added Makefile for Tailwind v4 build and deployment to `/docs/`.
