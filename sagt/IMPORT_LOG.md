@@ -24,6 +24,7 @@ All files from the source template were mirrored into the `./sagt/` directory:
 - **File Name Conflicts**: The target repository only had a root `README.md`. The template's `README.md` was moved to `sagt/README.md` to avoid overwriting the project's main documentation.
 - **Namespace**: All SAGT-related files are contained within the `sagt/` namespace to ensure zero interference with the target app's existing build/dev flow.
 - **.jtasks Format**: Updated `.jtasks` timestamp folder format to ISO 8601 `YYYY-MM-DDTHH:mm:ss.fff` per project requirements. Existing template tasks were renamed.
+- **NSAD Skill**: Added the Next Stage Aligned Design (NSAD) skill from the source template Jules/skills/NSAD directory.
 
 ## Additions (Glue Code)
 - **`SAGT_INDEX.md` (Root)**: The single canonical entrypoint for governance.
