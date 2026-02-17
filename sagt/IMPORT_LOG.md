@@ -41,3 +41,8 @@ All files from the source template were mirrored into the `./sagt/` directory:
 - **Action**: Imported NSAD skill from source template.
 - **Fidelity**: Grid 15x40, corner starts, adjacency rules implemented in `src/js/engine.js`.
 - **Infrastructure**: Added Makefile for Tailwind v4 build and deployment to `/docs/`.
+
+## [2025-02-17] CI/CD Implementation
+- **Action**: Added GitHub Action workflow for automated deployment.
+- **Workflow**: .github/workflows/deploy.yml
+- **Details**: Builds Tailwind v4 via Makefile and deploys to GitHub Pages using standard Actions.
