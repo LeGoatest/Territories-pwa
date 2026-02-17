@@ -17,5 +17,10 @@ To begin a new task (such as the GitHub Pages PWA build):
 3. Use the `.jtasks/` folder for deterministic task tracking.
 4. Consult `./NEW_PROJECT.md` if starting a new major component.
 
-## Maintenance
+## Maintenance & Tooling
 Updates to SAGT should be mirrored from the [source template](https://github.com/LeGoatest/Sovereign-agent-template) into this folder.
+
+### Running Governance Tools
+From the repository root:
+- **Vibe Check**: `bash sagt/sagt-check.sh`
+- **Canon Compile**: `bash sagt/canon-compile.sh` (Requires `PyYAML`)
