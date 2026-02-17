@@ -1,12 +1,12 @@
 {
   "name": "Territories",
   "short_name": "Territories",
-  "description": "Deterministic Strategy Game",
+  "description": "Deterministic Rectangle Strategy Game",
   "start_url": "/territories/index.html",
   "scope": "/territories/",
   "display": "standalone",
-  "background_color": "#f3f4f6",
-  "theme_color": "#000000",
+  "background_color": "#f8fafc",
+  "theme_color": "#0f172a",
   "icons": [
     {
       "src": "assets/icon-192.png",
