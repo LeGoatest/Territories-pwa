@@ -30,6 +30,7 @@
                 <h1 class="text-xl font-medium tracking-tight uppercase">TERRITORIES</h1>
             </div>
             <div class="flex gap-4 items-center">
+                <button id="install-btn" class="hidden text-[10px] font-bold border border-white/30 px-3 py-1.5 rounded uppercase hover:bg-white/10 transition-colors">Install App</button>
                 <a href="SAGT_INDEX.md" class="text-xs font-bold border border-white/30 px-3 py-1.5 rounded uppercase hover:bg-white/10 transition-colors">GOVERNANCE</a>
             </div>
         </header>
@@ -42,12 +43,55 @@
     </div>
 
     <script>
+        // Service Worker Registration
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(reg => {
                 console.log('SW registered');
                 reg.update();
             });
         }
+
+        // Install Prompt Logic
+        let deferredPrompt;
+        const installBtn = document.getElementById('install-btn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.classList.remove('hidden');
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`User response to install prompt: ${outcome}`);
+            deferredPrompt = null;
+            installBtn.classList.add('hidden');
+        });
+
+        window.addEventListener('appinstalled', () => {
+            deferredPrompt = null;
+            installBtn.classList.add('hidden');
+            console.log('PWA installed');
+        });
+
+        // Offline detection
+        function updateOnlineStatus() {
+            const indicator = document.getElementById('offline-indicator');
+            if (indicator) {
+                if (navigator.onLine) indicator.classList.add('hidden');
+                else indicator.classList.remove('hidden');
+            }
+        }
+
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+
+        // HTMX swap listener to re-check offline status when fragements update
+        document.body.addEventListener('htmx:sseMessage', () => {
+            setTimeout(updateOnlineStatus, 0);
+        });
     </script>
 </body>
 </html>

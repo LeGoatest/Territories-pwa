@@ -1,10 +1,12 @@
 // Territories v1.1 - Service Worker "Server"
-const CACHE_NAME = 'territories-v1.1.4';
+const CACHE_NAME = 'territories-v1.1.5';
 const ASSETS = [
   './',
   './index.html',
   './css/output.css',
   './manifest.webmanifest',
+  './icon.svg',
+  './icon-512.svg',
   'https://unpkg.com/htmx.org@2.0.0',
   'https://unpkg.com/htmx-ext-sse@2.2.1/sse.js',
   'https://code.iconify.design/3/3.1.0/iconify.min.js'
@@ -25,7 +27,7 @@ class Engine {
         this.board[0][0] = PLAYER_1;
         this.board[height - 1][width - 1] = PLAYER_2;
         this.currentPlayer = PLAYER_1;
-        this.dice = null; // { d1, d2, rotated: bool }
+        this.dice = null;
         this.passStreak = 0;
         this.gameOver = false;
         this.winner = null;
@@ -164,17 +166,11 @@ class AI {
         if (this.engine.gameOver) return null;
         const player = this.engine.currentPlayer;
         if (!this.engine.dice) this.engine.rollDice();
-
-        // AI checks both orientations
-        const d1 = this.engine.dice.d1;
-        const d2 = this.engine.dice.d2;
-
+        const d1 = this.engine.dice.d1, d2 = this.engine.dice.d2;
         const p1 = this.engine.getValidPlacements(player, d1, d2);
         const p2 = d1 !== d2 ? this.engine.getValidPlacements(player, d2, d1) : [];
         const all = [...p1, ...p2];
-
         if (all.length === 0) return { type: 'pass' };
-
         let bestScore = -1, bestMove = all[0];
         for (const rect of all) {
             let score = rect.w * rect.h;
@@ -192,7 +188,6 @@ let sseControllers = new Set();
 function renderBoard(game) {
     let html = '<table class="board-table mx-auto">';
     const active = game.activeDice;
-
     for (let y = 0; y < game.height; y++) {
         html += '<tr>';
         for (let x = 0; x < game.width; x++) {
@@ -201,7 +196,6 @@ function renderBoard(game) {
             let cellStyle = '';
             if (owner === PLAYER_1) cellStyle = 'background-color: #375E97;';
             else if (owner === PLAYER_2) cellStyle = 'background-color: #FB6542;';
-
             let hxAttr = '';
             if (!game.gameOver && game.currentPlayer === PLAYER_1 && active) {
                 if (game.isValidPlacement(PLAYER_1, x, y, active.w, active.h)) {
@@ -209,7 +203,6 @@ function renderBoard(game) {
                     hxAttr = ` hx-post="/api/game/action/place?x=${x}&y=${y}&w=${active.w}&h=${active.h}" hx-trigger="click" hx-swap="none"`;
                 }
             }
-
             html += `<td id="cell-${x}-${y}" class="${cellClass}" style="${cellStyle}"${hxAttr}></td>`;
         }
         html += '</tr>';
@@ -223,7 +216,6 @@ function renderHUD(game) {
     const p1Percent = ((score.p1 / score.total) * 100).toFixed(1);
     const p2Percent = ((score.p2 / score.total) * 100).toFixed(1);
     const active = game.activeDice;
-
     return `
         <div class="bg-white border-b border-gray-200 shadow-sm px-8 py-4 grid grid-cols-3 items-center shrink-0">
             <div class="flex flex-col items-start gap-1">
@@ -236,11 +228,9 @@ function renderHUD(game) {
                 </div>
                 <span class="text-[10px] font-bold text-gray-500">${p1Percent}% OCCUPIED</span>
             </div>
-
             <div class="flex flex-col items-center justify-center min-h-[140px]">
                 <div class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">${game.gameOver ? 'GAME OVER' : (game.currentPlayer === PLAYER_1 ? 'YOUR TURN' : 'BOB IS THINKING...')}</div>
                 <div class="text-[10px] text-gray-300 font-mono mb-3 uppercase tracking-tighter">${game.lastAction}</div>
-
                 ${active && !game.gameOver ? `
                 <div class="flex flex-col items-center gap-3">
                     <div class="flex items-center gap-4">
@@ -263,15 +253,14 @@ function renderHUD(game) {
                 </button>
                 ` : ''}
                 `}
-
                 ${game.gameOver ? `
                     <div class="text-xl font-black text-[#375E97] mt-2 uppercase tracking-tight">
                         ${game.winner === 'DRAW' ? 'DRAW!' : (game.winner === PLAYER_1 ? 'ALICE WINS!' : 'BOB WINS!')}
                     </div>
                     <button hx-post="/api/game/action/new" hx-swap="none" class="mt-2 text-xs font-bold text-gray-500 underline uppercase hover:text-[#375E97] transition-colors">New Game</button>
                 ` : ''}
+                <div id="offline-indicator" class="hidden mt-2 text-[8px] font-black text-red-500 uppercase tracking-widest animate-bounce">Offline Mode</div>
             </div>
-
             <div class="flex flex-col items-end gap-1">
                 <div class="flex items-center gap-2">
                     <span class="font-bold text-[#FB6542]">${game.vsAI ? 'BOB (BOT)' : 'PLAYER 2'} ${game.currentPlayer === PLAYER_2 ? '▶' : ''}</span>
@@ -334,7 +323,6 @@ self.addEventListener('fetch', event => {
         const p = (async () => {
             const action = url.pathname.split('/').pop();
             const params = url.searchParams;
-
             if (action === 'new') game = new Engine();
             else if (action === 'roll' && game.currentPlayer === PLAYER_1) game.rollDice();
             else if (action === 'rotate' && game.currentPlayer === PLAYER_1) game.rotateDice();
@@ -343,12 +331,8 @@ self.addEventListener('fetch', event => {
                 const x = parseInt(params.get('x')), y = parseInt(params.get('y')), w = parseInt(params.get('w')), h = parseInt(params.get('h'));
                 game.applyPlacement(PLAYER_1, { x, y, w, h });
             }
-
             pushUpdate();
-
             while (!game.gameOver && game.currentPlayer === PLAYER_2 && game.vsAI) {
-                // Simulate thinking delay
-                // await new Promise(r => setTimeout(r, 500)); // SW might be killed, so maybe not delay
                 const ai = new AI(game, game.aiLevel);
                 const move = ai.getMove();
                 if (move.type === 'pass') game.applyPass();
