@@ -5,7 +5,8 @@
   :root, :host {
     --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      "Courier New", monospace;
     --color-red-50: oklch(97.1% 0.013 17.38);
     --color-red-500: oklch(63.7% 0.237 25.331);
     --color-red-600: oklch(57.7% 0.245 27.325);
@@ -42,6 +43,7 @@
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
+    --color-primary: #375E97;
   }
 }
 @layer base {
@@ -286,8 +288,8 @@
   .shrink-0 {
     flex-shrink: 0;
   }
-  .border-collapse {
-    border-collapse: collapse;
+  .transform {
+    transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
   }
   .animate-bounce {
     animation: var(--animate-bounce);
@@ -592,62 +594,57 @@
     }
   }
 }
-.cell-inner {
-  width: 100%;
-  height: 100%;
-  transition: background-color 0.1s;
+@layer base {
+  .app-bar {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    color: white;
+  }
+  .btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+  }
+  .paper {
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    padding: 2px;
+  }
+  .board-table {
+    border-collapse: collapse;
+    background: white;
+  }
+  .cell {
+    width: 24px;
+    height: 24px;
+    border: 1px solid #f3f4f6;
+    transition: background-color 0.2s;
+  }
+  .cell-valid {
+    cursor: pointer;
+  }
+  .cell-valid:hover {
+    background-color: #dbeafe !important;
+  }
 }
-.occupied-p1 {
-  background-color: #375E97;
+@property --tw-rotate-x {
+  syntax: "*";
+  inherits: false;
 }
-.occupied-p2 {
-  background-color: #FB6542;
+@property --tw-rotate-y {
+  syntax: "*";
+  inherits: false;
 }
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  z-index: 10;
-  opacity: 0.5;
-  pointer-events: none;
+@property --tw-rotate-z {
+  syntax: "*";
+  inherits: false;
 }
-.overlay-green {
-  background-color: #00FF00;
+@property --tw-skew-x {
+  syntax: "*";
+  inherits: false;
 }
-.overlay-red {
-  background-color: #FF0000;
-}
-.overlay-yellow {
-  background-color: #FFFF00;
-}
-body {
-  background-color: #FAFAFA;
-  color: #333;
-}
-.paper {
-  background-color: white;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  border-radius: 4px;
-  padding: 16px;
-}
-.app-bar {
-  background-color: #375E97;
-  color: white;
-  box-shadow: 0 2px 4px -1px rgb(0 0 0 / 0.2);
-}
-.btn-primary {
-  background-color: #375E97;
-  color: white;
-}
-.btn-secondary {
-  background-color: #FB6542;
-  color: white;
-}
-.grid-40 {
-  display: grid;
-  grid-template-columns: repeat(40, 24px);
+@property --tw-skew-y {
+  syntax: "*";
+  inherits: false;
 }
 @property --tw-border-style {
   syntax: "*";
@@ -764,6 +761,11 @@ body {
 @layer properties {
   @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
+      --tw-rotate-x: initial;
+      --tw-rotate-y: initial;
+      --tw-rotate-z: initial;
+      --tw-skew-x: initial;
+      --tw-skew-y: initial;
       --tw-border-style: solid;
       --tw-font-weight: initial;
       --tw-tracking: initial;
