@@ -6,3 +6,5 @@ coverage/
 *.log
 *.tmp
 verification/
+node_modules/
+verification/

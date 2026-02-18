@@ -1,20 +1,17 @@
 {
-  "name": "Territories Strategy",
+  "name": "Territories: Dice Rectangle Expansion",
   "short_name": "Territories",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f8fafc",
-  "theme_color": "#0f172a",
+  "background_color": "#FAFAFA",
+  "theme_color": "#1e3a8a",
+  "description": "A strategic grid-based expansion game governed by SAGT.",
   "icons": [
     {
-      "src": "assets/icon-192.png",
+      "src": "icon.svg",
       "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "assets/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
   ]
 }
