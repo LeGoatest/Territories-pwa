@@ -1,6 +1,6 @@
 .PHONY: build clean tailwind
 
-docs/css/output.css: docs/input.css docs/index.html docs/js/*.js docs/fragments/*.html
+docs/css/output.css: docs/input.css docs/index.html docs/sw.js
 	npx @tailwindcss/cli -i docs/input.css -o docs/css/output.css
 
 build: docs/css/output.css
