@@ -1,15 +1,15 @@
 // Territories v1.1 - Service Worker "Server"
-const CACHE_NAME = 'territories-v1.1.5';
+const CACHE_NAME = 'territories-v1.1.9';
 const ASSETS = [
   './',
   './index.html',
-  './css/output.css',
+  './assets/css/output.css',
   './manifest.webmanifest',
-  './icon.svg',
-  './icon-512.svg',
-  'https://unpkg.com/htmx.org@2.0.0',
-  'https://unpkg.com/htmx-ext-sse@2.2.1/sse.js',
-  'https://code.iconify.design/3/3.1.0/iconify.min.js'
+  './assets/images/icon.svg',
+  './assets/images/icon-512.svg',
+  './assets/js/htmx.min.js',
+  './assets/js/sse.js',
+  './assets/js/iconify.min.js'
 ];
 
 // --- ENGINE LOGIC ---

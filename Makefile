@@ -1,10 +1,9 @@
 .PHONY: build clean tailwind
 
-docs/css/output.css: docs/input.css docs/index.html docs/sw.js
-	npx @tailwindcss/cli -i docs/input.css -o docs/css/output.css
+docs/assets/css/output.css: docs/assets/css/input.css docs/index.html docs/sw.js
+	npx tailwindcss -i docs/assets/css/input.css -o docs/assets/css/output.css
 
-build: docs/css/output.css
+build: docs/assets/css/output.css
 
 clean:
-	# Since docs is now source, we only clean the output artifact
-	rm -f docs/css/output.css
+	rm -f docs/assets/css/output.css

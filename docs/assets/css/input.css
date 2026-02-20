@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #375E97;
+  --color-secondary: #FB6542;
+}
+
+@layer base {
+  .app-bar {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    color: white;
+  }
+
+  .btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+  }
+
+  .paper {
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    padding: 2px;
+  }
+
+  .board-table {
+    border-collapse: collapse;
+    background: white;
+  }
+
+  .cell {
+    width: 24px;
+    height: 24px;
+    border: 1px solid #f3f4f6;
+    transition: background-color 0.2s;
+  }
+
+  .cell-valid {
+    cursor: pointer;
+  }
+
+  .cell-valid:hover {
+    background-color: #dbeafe !important;
+  }
+}
