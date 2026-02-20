@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Territories Strategy - Spec v1.1</title>
-    <link rel="stylesheet" href="css/output.css?v=2">
+    <link rel="stylesheet" href="assets/css/output.css">
     <link rel="manifest" href="manifest.webmanifest">
     <script src="assets/js/htmx.min.js"></script>
     <script src="assets/js/sse.js"></script>
@@ -17,7 +17,7 @@
 
         <header class="app-bar h-16 flex items-center px-6 justify-between shrink-0">
             <div class="flex items-center gap-3">
-                <span class="iconify text-2xl" data-icon="mdi:map-legend"></span>
+                <span class="icon-[mdi--map-legend] text-2xl"></span>
                 <h1 class="text-xl font-medium tracking-tight uppercase">TERRITORIES</h1>
             </div>
             <div class="flex gap-4 items-center">
@@ -34,6 +34,7 @@
     </div>
 
     <script>
+        // Service Worker Registration
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(reg => {
                 console.log('SW registered');
@@ -62,6 +63,22 @@
         window.addEventListener('appinstalled', () => {
             deferredPrompt = null;
             installBtn.classList.add('hidden');
+        });
+
+        // Offline detection
+        function updateOnlineStatus() {
+            const indicator = document.getElementById('offline-indicator');
+            if (indicator) {
+                if (navigator.onLine) indicator.classList.add('hidden');
+                else indicator.classList.remove('hidden');
+            }
+        }
+
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+
+        document.body.addEventListener('htmx:sseMessage', () => {
+            setTimeout(updateOnlineStatus, 0);
         });
     </script>
 </body>

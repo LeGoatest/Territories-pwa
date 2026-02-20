@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@plugin "@iconify/tailwind4" {
+  /* This plugin provides icon-[set--name] utilities */
+}
+
 @theme {
   --color-primary: #375E97;
   --color-secondary: #FB6542;
