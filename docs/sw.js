@@ -1,5 +1,5 @@
 // Territories v1.1 - Service Worker "Server"
-const CACHE_NAME = 'territories-v1.1.9';
+const CACHE_NAME = 'territories-v1.1.10';
 const ASSETS = [
   './',
   './index.html',
@@ -7,6 +7,8 @@ const ASSETS = [
   './manifest.webmanifest',
   './assets/images/icon.svg',
   './assets/images/icon-512.svg',
+  './assets/images/icon-192.png',
+  './assets/images/icon-512.png',
   './assets/js/htmx.min.js',
   './assets/js/sse.js',
   './assets/js/iconify.min.js'
@@ -235,7 +237,7 @@ function renderHUD(game) {
                 <div class="flex flex-col items-center gap-3">
                     <div class="flex items-center gap-4">
                         <button hx-post="/api/game/action/rotate" hx-swap="none" class="bg-gray-100 hover:bg-gray-200 p-2 rounded-lg transition-colors flex items-center gap-2 text-[10px] font-bold text-gray-600">
-                             <span class="iconify text-lg" data-icon="mdi:rotate-right"></span> ROTATE
+                             <span class="icon-[mdi--rotate-right] text-lg"></span> ROTATE
                         </button>
                         <div class="bg-gray-50 border border-gray-200 p-2 px-4 rounded shadow-inner font-black text-2xl text-gray-700 tracking-tight">
                             ${active.w} × ${active.h}
