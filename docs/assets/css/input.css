@@ -48,14 +48,26 @@
   .ghost-piece {
     pointer-events: none;
     position: absolute;
-    background-color: rgba(55, 94, 151, 0.3);
-    border: 2px solid rgba(55, 94, 151, 0.6);
     z-index: 10;
     transition: all 0.05s ease-out;
+    border-width: 2px;
+  }
+
+  .ghost-piece.valid {
+    background-color: rgba(34, 197, 94, 0.3);
+    border-color: rgba(34, 197, 94, 0.6);
   }
 
   .ghost-piece.invalid {
     background-color: rgba(239, 68, 68, 0.3);
     border-color: rgba(239, 68, 68, 0.6);
+  }
+
+  .diff-btn {
+    @apply border-gray-200 text-gray-400 bg-white;
+  }
+
+  .diff-btn.active {
+    @apply border-[#375E97] text-[#375E97] bg-blue-50;
   }
 }

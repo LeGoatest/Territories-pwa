@@ -8,6 +8,7 @@ This is the canonical entrypoint for governance in the `territories` repository.
 - **[Security Model](./sagt/docs/SECURITY_MODEL.md)**: Trust boundaries and safety constraints.
 - **[Operations & Mutation](./sagt/docs/MUTATION_PROCESS.md)**: How the law is changed.
 - **[Terminology & Glossary](./sagt/docs/TERMINOLOGY.md)**: Project-specific definitions.
+- **[Game Invariants](./docs/GAME_INVARIANTS.md)**: Formal rules of the Territories game.
 
 ## Agent Operating Model
 - **[Jules Operating Instructions](./sagt/Jules/JULES.md)**: Mandatory rules for AI agents.
