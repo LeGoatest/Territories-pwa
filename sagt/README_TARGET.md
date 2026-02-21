@@ -6,6 +6,7 @@ This folder contains the **Sovereign Agent Governance Template (SAGT)** implemen
 - **Governance Root**: `./sagt/`
 - **Canonical Entrypoint**: `../SAGT_INDEX.md`
 - **Operating Rules**: `./Jules/JULES.md`
+- **Game Invariants**: `../docs/GAME_INVARIANTS.md`
 
 ## Authoritative Hierarchy
 All files within this directory (`./sagt/`) are authoritative for governance. The precedence for these files is defined in `./docs/ARCHITECTURE_INDEX.md`.
