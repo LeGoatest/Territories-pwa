@@ -113,10 +113,59 @@ class Engine {
                 this.board[rect.y + i][rect.x + j] = player;
             }
         }
+
+        this.applyAreaCapture(player);
+
         this.passStreak = 0;
         this.lastAction = `Placed ${rect.w}×${rect.h} at ${rect.x},${rect.y}`;
         this.nextTurn();
         return true;
+    }
+
+    applyAreaCapture(player) {
+        const opponent = player === PLAYER_1 ? PLAYER_2 : PLAYER_1;
+        const visited = new Set();
+        const height = this.height;
+        const width = this.width;
+
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                if (this.board[y][x] === EMPTY && !visited.has(`${x},${y}`)) {
+                    const region = [];
+                    const queue = [[x, y]];
+                    visited.add(`${x},${y}`);
+                    let touchesOpponent = false;
+                    let touchesCurrentPlayer = false;
+
+                    let head = 0;
+                    while(head < queue.length){
+                        const [cx, cy] = queue[head++];
+                        region.push([cx, cy]);
+
+                        const neighbors = [[cx-1, cy], [cx+1, cy], [cx, cy-1], [cx, cy+1]];
+                        for(const [nx, ny] of neighbors){
+                            if(nx >= 0 && nx < width && ny >= 0 && ny < height){
+                                const cell = this.board[ny][nx];
+                                if(cell === opponent){
+                                    touchesOpponent = true;
+                                } else if(cell === player){
+                                    touchesCurrentPlayer = true;
+                                } else if(cell === EMPTY && !visited.has(`${nx},${ny}`)){
+                                    visited.add(`${nx},${ny}`);
+                                    queue.push([nx, ny]);
+                                }
+                            }
+                        }
+                    }
+
+                    if (touchesCurrentPlayer && !touchesOpponent) {
+                        for (const [rx, ry] of region) {
+                            this.board[ry][rx] = player;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     applyPass() {
@@ -188,8 +237,8 @@ let sseControllers = new Set();
 
 // --- RENDERERS ---
 function renderBoard(game) {
-    let html = '<table class="board-table mx-auto">';
     const active = game.activeDice;
+    let html = `<table class="board-table mx-auto relative" data-dice-w="${active ? active.w : 0}" data-dice-h="${active ? active.h : 0}">`;
     for (let y = 0; y < game.height; y++) {
         html += '<tr>';
         for (let x = 0; x < game.width; x++) {
