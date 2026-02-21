@@ -651,6 +651,18 @@
   .cell-valid:hover {
     background-color: #dbeafe !important;
   }
+  .ghost-piece {
+    pointer-events: none;
+    position: absolute;
+    background-color: rgba(55, 94, 151, 0.3);
+    border: 2px solid rgba(55, 94, 151, 0.6);
+    z-index: 10;
+    transition: all 0.05s ease-out;
+  }
+  .ghost-piece.invalid {
+    background-color: rgba(239, 68, 68, 0.3);
+    border-color: rgba(239, 68, 68, 0.6);
+  }
 }
 @property --tw-rotate-x {
   syntax: "*";

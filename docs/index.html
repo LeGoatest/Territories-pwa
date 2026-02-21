@@ -80,6 +80,75 @@
         document.body.addEventListener('htmx:sseMessage', () => {
             setTimeout(updateOnlineStatus, 0);
         });
+
+        // Ghost Piece Logic
+        document.addEventListener('mousemove', (e) => {
+            const board = document.querySelector('.board-table');
+            if (!board) return;
+
+            const cell = e.target.closest('.cell');
+            const ghost = document.getElementById('ghost-piece');
+
+            if (!cell) {
+                if (ghost) ghost.style.display = 'none';
+                return;
+            }
+
+            const diceW = parseInt(board.dataset.diceW);
+            const diceH = parseInt(board.dataset.diceH);
+
+            if (!diceW || !diceH) {
+                if (ghost) ghost.style.display = 'none';
+                return;
+            }
+
+            // Simple check if it's P1 turn by looking for the "YOUR TURN" text
+            // In a more robust app we'd use a data attribute
+            const isP1Turn = document.querySelector('.text-gray-400')?.innerText.includes('YOUR TURN') ||
+                             document.body.innerText.includes('YOUR TURN');
+
+            if (!isP1Turn) {
+                if (ghost) ghost.style.display = 'none';
+                return;
+            }
+
+            updateGhost(board, cell, diceW, diceH);
+        });
+
+        function updateGhost(board, cell, w, h) {
+            let ghost = document.getElementById('ghost-piece');
+            if (!ghost) {
+                ghost = document.createElement('div');
+                ghost.id = 'ghost-piece';
+                ghost.className = 'ghost-piece';
+                board.appendChild(ghost); // Append to board so it stays relative
+            }
+
+            // Cell position relative to board
+            const cellX = cell.offsetLeft;
+            const cellY = cell.offsetTop;
+            const cellSize = cell.offsetWidth;
+
+            ghost.style.width = (cellSize * w) + 'px';
+            ghost.style.height = (cellSize * h) + 'px';
+            ghost.style.top = cellY + 'px';
+            ghost.style.left = cellX + 'px';
+            ghost.style.display = 'block';
+
+            if (cell.classList.contains('cell-valid')) {
+                ghost.classList.remove('invalid');
+            } else {
+                ghost.classList.add('invalid');
+            }
+        }
+
+        // Hide ghost on mouse leave board
+        document.addEventListener('mouseover', (e) => {
+             if (!e.target.closest('.board-table')) {
+                 const ghost = document.getElementById('ghost-piece');
+                 if (ghost) ghost.style.display = 'none';
+             }
+        });
     </script>
 </body>
 </html>
