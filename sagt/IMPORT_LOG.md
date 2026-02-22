@@ -1,67 +1,32 @@
-# SAGT Import Log
+# SAGT IMPORT LOG - territories
 
-## Source Information
-- **Source Repository**: `https://github.com/LeGoatest/Sovereign-agent-template`
-- **Branch**: `main`
-- **Import Date**: 2025-02-17
-- **SAGT Version**: 2.0 (from template `VERSION` file)
+- **Date:** 2025-05-14
+- **Source:** Sovereign Agent Governance Template (SAGT) v2.0
+- **Source Repo:** `https://github.com/LeGoatest/Sovereign-agent-template`
+- **Target Repo:** `https://github.com/lehaSVV2009/territories`
 
-## Imported Files/Folders
-All files from the source template were mirrored into the `./sagt/` directory:
-- `sagt/docs/` (Architecture & Governance Canon)
-- `sagt/Jules/` (Agent Operating Instructions & Skills)
-- `sagt/.jtasks/` (Execution Plane)
-- `sagt/BOOTSTRAP.md`
-- `sagt/CONTRIBUTING.md`
-- `sagt/NEW_PROJECT.md`
-- `sagt/README.md`
-- `sagt/LICENSE`
-- `sagt/VERSION`
-- `sagt/canon-compile.sh`
-- `sagt/sagt-check.sh`
+## Imported Components
+- Full SAGT v2.0 template vendored into `./sagt/`
+- Root index `SAGT_INDEX.md` created.
+- Root Jules operating model `JULES.md` created.
+- `sagt/BOUNDARY.md` defining Governance vs Product space.
+- `sagt/README_TARGET.md` describing repo-specific usage.
 
-## Conflict Resolution
-- **File Name Conflicts**: The target repository only had a root `README.md`. The template's `README.md` was moved to `sagt/README.md` to avoid overwriting the project's main documentation.
-- **Namespace**: All SAGT-related files are contained within the `sagt/` namespace to ensure zero interference with the target app's existing build/dev flow.
-- **.jtasks Format**: Updated `.jtasks` timestamp folder format to ISO 8601 `YYYY-MM-DDTHH:mm:ss.fff` per project requirements. Existing template tasks were renamed.
-- **NSAD Skill**: Added the Next Stage Aligned Design (NSAD) skill from the source template Jules/skills/NSAD directory.
+## Conflicts & Resolutions
+- **Product Code:** Existing `README.md` was kept; PWA implementation was placed in `docs/` for GitHub Pages deployment.
+- **Path Rewrites:** Updated relative links in `SAGT_INDEX.md` to point into the `./sagt/` namespace.
 
-## Additions (Glue Code)
-- **`SAGT_INDEX.md` (Root)**: The single canonical entrypoint for governance.
-- **`JULES.md` (Root)**: A pointer to the authoritative agent instructions in `sagt/Jules/JULES.md`.
-- **`sagt/README_TARGET.md`**: Implementation-specific notes for this repo.
-- **`sagt/BOUNDARY.md`**: Defined the governance vs. product separation.
+## Implementation Notes (Phase 2)
+- Developed a high-fidelity Territories PWA in `docs/`.
+- **Engine:** Implemented "Closed Loop" area capture logic in `engine.js`.
+- **AI:** Implemented Level 2 Deterministic Bot.
+- **Styling:** Tailwind CLI v4 used for styling.
+- **Visual Fidelity:** Added high-visibility yellow highlights for reachable areas and anchor points to match original game references.
+- **CI/CD:** Added GitHub Actions for automated deployment.
 
 ## Verification
-- Checked internal relative links in `sagt/docs/ARCHITECTURE_INDEX.md` and `sagt/README.md`.
-- Navigation within `./sagt/` and from the root index is functional.
+- Unit tests for engine logic in `tests/engine.test.js`.
+- UI verification performed via Playwright to ensure correct rendering of highlights and PWA features.
 
-## [2025-02-17] PWA Implementation & NSAD Skill
-- **Action**: Implemented high-fidelity Territories PWA.
-- **Action**: Imported NSAD skill from source template.
-- **Fidelity**: Grid 15x40, corner starts, adjacency rules implemented in `src/js/engine.js`.
-- **Infrastructure**: Added Makefile for Tailwind v4 build and deployment to `/docs/`.
-
-## [2025-02-17] CI/CD Implementation
-- **Action**: Added GitHub Action workflow for automated deployment.
-- **Workflow**: .github/workflows/deploy.yml
-- **Details**: Builds Tailwind v4 via Makefile and deploys to GitHub Pages using standard Actions.
-
-## [2025-02-17] High-Fidelity Refactoring & Structural Cleanup
-- **Action**: Deleted `src/` and moved all source code to `docs/` for direct GitHub Pages serving (Option A).
-- **Parity**: Implemented "Closed Loop" auto-occupation logic in `docs/js/engine.js` for mechanical parity with lehaSVV2009/territories.
-- **UI**: Enhanced tactical UI with coordinate display and better grid rendering in `docs/js/ui.js`.
-- **Build**: Simplified Makefile to build Tailwind directly from `docs/input.css` to `docs/css/output.css`.
-
-## [2025-02-17] Mechanical Fidelity Correction
-- **Action**: Verified original game logic from lehaSVV2009/territories-core.
-- **Correction**: Re-implemented 'Closed Loop' logic to use flood-fill based on surroundings, ensuring it matches the boardgame.io implementation.
-- **UI**: Aligned UI colors (#375E97, #FB6542) and table-based layout with the original game's visual identity.
-
-## [2025-02-18] High-Fidelity Visual Highlights & UX Refinement
-- **Action**: Implemented "Reachable Area" highlights based on original game screenshots.
-- **Logic**: All cells that can be covered by a valid placement from any valid anchor are now shaded in yellow.
-- **UI**: Added distinct "Anchor" highlights for cells where a placement can start.
-- **Mobile UX**: Added `cell-touch-anchor` feedback for the Touch-to-Preview/Tap-to-Confirm mobile pattern.
-- **Visuals**: Enhanced Ghost Piece shader with borders and box-shadows for better visibility on white backgrounds.
-- **Verification**: Captured `verification_highlights.png` and `verification_ghost.png` to confirm visual parity.
+---
+*Generated by Jules*
