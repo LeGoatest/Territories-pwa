@@ -248,6 +248,19 @@
             anchor.setAttribute('data-dice-w', active ? active.w : 0);
             anchor.setAttribute('data-dice-h', active ? active.h : 0);
 
+            // Pre-calculate reachable cells for high-fidelity highlights
+            const reachable = new Set();
+            if (!game.gameOver && game.currentPlayer === PLAYER_1 && active) {
+                const anchors = game.getValidPlacements(PLAYER_1, active.w, active.h);
+                for (const rect of anchors) {
+                    for (let i = 0; i < rect.h; i++) {
+                        for (let j = 0; j < rect.w; j++) {
+                            reachable.add(`${rect.x + j},${rect.y + i}`);
+                        }
+                    }
+                }
+            }
+
             let html = '<table class="board-table mx-auto relative">';
             for (let y = 0; y < game.height; y++) {
                 html += '<tr>';
@@ -257,8 +270,14 @@
                     if (owner === PLAYER_1) cellStyle = `background-color: ${COLORS.P1};`;
                     else if (owner === PLAYER_2) cellStyle = `background-color: ${COLORS.P2};`;
 
-                    const isValid = !game.gameOver && game.currentPlayer === PLAYER_1 && active && game.isValidPlacement(PLAYER_1, x, y, active.w, active.h);
-                    const cellClass = `cell ${isValid ? 'cell-valid' : ''}`;
+                    const isReachable = reachable.has(`${x},${y}`);
+                    const isValidAnchor = !game.gameOver && game.currentPlayer === PLAYER_1 && active && game.isValidPlacement(PLAYER_1, x, y, active.w, active.h);
+                    const isTouchAnchor = touchAnchor && touchAnchor.x === x && touchAnchor.y === y;
+
+                    let cellClass = 'cell';
+                    if (isReachable) cellClass += ' cell-valid';
+                    if (isValidAnchor) cellClass += ' cell-anchor';
+                    if (isTouchAnchor) cellClass += ' cell-touch-anchor';
 
                     html += `<td id="cell-${x}-${y}" class="${cellClass}" style="${cellStyle}" data-x="${x}" data-y="${y}"></td>`;
                 }

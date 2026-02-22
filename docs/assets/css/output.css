@@ -818,10 +818,20 @@
     transition: background-color 0.2s;
   }
   .cell-valid {
-    cursor: pointer;
+    background-color: rgba(253, 224, 71, 0.2) !important;
   }
-  .cell-valid:hover {
-    background-color: #dbeafe !important;
+  .cell-anchor {
+    cursor: pointer;
+    background-color: rgba(253, 224, 71, 0.45) !important;
+  }
+  .cell-anchor:hover {
+    background-color: rgba(253, 224, 71, 0.7) !important;
+  }
+  .cell-touch-anchor {
+    outline: 2px solid #375E97;
+    outline-offset: -2px;
+    position: relative;
+    z-index: 5;
   }
   .ghost-piece {
     pointer-events: none;
@@ -831,12 +841,14 @@
     border-width: 2px;
   }
   .ghost-piece.valid {
-    background-color: rgba(34, 197, 94, 0.3);
-    border-color: rgba(34, 197, 94, 0.6);
+    background-color: rgba(34, 197, 94, 0.25);
+    border: 3px solid rgba(34, 197, 94, 0.8);
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
   }
   .ghost-piece.invalid {
-    background-color: rgba(239, 68, 68, 0.3);
-    border-color: rgba(239, 68, 68, 0.6);
+    background-color: rgba(239, 68, 68, 0.25);
+    border: 3px solid rgba(239, 68, 68, 0.8);
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
   }
   .diff-btn {
     border-color: var(--color-gray-200);
