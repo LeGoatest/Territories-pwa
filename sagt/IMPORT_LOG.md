@@ -57,3 +57,11 @@ All files from the source template were mirrored into the `./sagt/` directory:
 - **Action**: Verified original game logic from lehaSVV2009/territories-core.
 - **Correction**: Re-implemented 'Closed Loop' logic to use flood-fill based on surroundings, ensuring it matches the boardgame.io implementation.
 - **UI**: Aligned UI colors (#375E97, #FB6542) and table-based layout with the original game's visual identity.
+
+## [2025-02-18] High-Fidelity Visual Highlights & UX Refinement
+- **Action**: Implemented "Reachable Area" highlights based on original game screenshots.
+- **Logic**: All cells that can be covered by a valid placement from any valid anchor are now shaded in yellow.
+- **UI**: Added distinct "Anchor" highlights for cells where a placement can start.
+- **Mobile UX**: Added `cell-touch-anchor` feedback for the Touch-to-Preview/Tap-to-Confirm mobile pattern.
+- **Visuals**: Enhanced Ghost Piece shader with borders and box-shadows for better visibility on white backgrounds.
+- **Verification**: Captured `verification_highlights.png` and `verification_ghost.png` to confirm visual parity.
